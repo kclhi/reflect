@@ -1,20 +1,20 @@
 apiVersion: networking.k8s.io/v1 
 kind: Ingress
 metadata:
-  name: user
+  name: user-internal
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "service-ca-issuer"
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - USER_URL
-    secretName: USER_SECRET
+    - INTERNAL_API_URL
+    secretName: USER_INTERNAL_SECRET
   rules:
-  - host: USER_URL
+  - host: INTERNAL_API_URL
     http:
       paths:
-      - path: /nokia/
+      - path: /internal/
         pathType: Prefix
         backend:
           service:

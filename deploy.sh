@@ -1,9 +1,9 @@
 echo "=> building image..."
 docker build -t user .
-docker rmi registry.gitlab.com/kclhi/reflect/user:latest
-docker tag $(docker images -q user) registry.gitlab.com/kclhi/reflect/user:latest
+docker rmi registry.gitlab.com/kclreflect/user/user:latest
+docker tag $(docker images -q user) registry.gitlab.com/kclreflect/user/user:latest
 echo "=> pushing image..."
-docker push registry.gitlab.com/kclhi/reflect/user:latest
+docker push registry.gitlab.com/kclreflect/user/user:latest
 # ---------------------------------------------- #
 export $(cat ./deploy/kubernetes/.env | xargs)
 kubectl config set-context --current --namespace=$DB_NAMESPACE

@@ -10,7 +10,8 @@ import {join} from 'path';
 import merge from 'lodash.merge';
 import logger from 'winston';
 
-import nokia from './modules/routes/nokia'
+import nokia from './modules/routes/nokia';
+import internal from './modules/routes/internal';
 import connect from './modules/db/index';
 import {Db} from './modules/db/index';
 import Config from './config/config';
@@ -95,6 +96,7 @@ export default async() => {
 
   // routes
   app.register(nokia, {prefix:'/nokia'});
+  app.register(internal, {prefix:'/internal'});
   
   return app;
 

@@ -30,13 +30,12 @@ describe('user', () => {
     mockManager.mock('subscribeToNotifications', true);
     const setIdCookie = await app.inject({method:'POST', url:'/nokia/setIdCookie', payload:{'patientId':'quuz'}});
     const addUser = await app.inject({method:'GET', url:'/nokia/callback?code=00DEF&state=XYZ', cookies:{[app.config.PATIENT_ID_COOKIE]:cookieParser.parseString(setIdCookie.headers['set-cookie']?.toString()||'').value}});
-    ImportMock.restore();
     expect(addUser.statusCode).to.equal(200);
     expect(await NokiaModel.find({'_id':'quuz'})).to.have.lengthOf(1);
-    const getUser = await app.inject({method:'POST', url:'/nokia/id', payload:{'nokiaId':'quux'}});
+    const getUser = await app.inject({method:'POST', url:'/internal/id', payload:{'nokiaId':'quux'}});
     expect(getUser.statusCode).to.equal(200);
-    ImportMock.restore();
     expect(getUser.body).to.equal('{"patientId":"quuz"}');
+    ImportMock.restore();
   }).timeout(0);
 
   it('can create query string', async() => {
