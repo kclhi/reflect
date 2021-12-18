@@ -256,3 +256,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/git,node,data,images,dropbox,certificates,archlinuxpackages
 
 info.txt
+template
+build

@@ -1,7 +1,0 @@
-controller:
-  service:
-    internal:
-      enabled: true
-      annotations:
-        # creates second internal load balancer for inter-service communication
-        service.beta.kubernetes.io/aws-load-balancer-internal: "true"

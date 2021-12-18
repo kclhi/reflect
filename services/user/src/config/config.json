@@ -1,7 +1,0 @@
-{
-  "NOKIA": {
-    "AUTHORISATION_URL":"https://account.withings.com/oauth2_user/authorize2",
-    "TOKEN_URL":"https://account.withings.com/oauth2/token",
-    "SUBSCRIPTION_URL":"https://wbsapi.withings.net/notify"
-  }
-}
