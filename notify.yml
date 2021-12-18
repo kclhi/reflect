@@ -6,9 +6,12 @@ functions:
   notify:
     lang: node16
     handler: ./notify
-    image: registry.gitlab.com/kclhi/reflect/notify:latest
+    image: registry.gitlab.com/kclreflect/device/notify:latest
     secrets:
       - queue-cert
       - ${QUEUE_CLIENT_SECRET:-queue-client-tls}
+      - service-ca-cert
     environment_file:
-      - env.notify.yml 
+      - env.notify.yml
+    environment:
+      NODE_EXTRA_CA_CERTS: /var/openfaas/secrets/service-ca.crt
