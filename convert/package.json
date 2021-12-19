@@ -4,7 +4,7 @@
   "description": "OpenFaaS Function",
   "main": "handler.js",
   "scripts": {
-    "test": "mocha"
+    "test": "NODE_ENV=test mocha './tests/**/*.ts'"
   },
   "keywords": [],
   "author": "Martin Chapman",
@@ -13,7 +13,12 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@types/mocha": "^9.0.0",
     "chai": "^4.3.4",
-    "mocha": "^9.1.3"
+    "fastify": "^3.25.0",
+    "mocha": "^9.1.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   }
 }
