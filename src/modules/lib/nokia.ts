@@ -22,6 +22,23 @@ export default class Nokia {
     return undefined;
   }
 
+  static async refreshAccessToken(tokenUrl:string, clientId:string, consumerSecret:string, refreshToken:string):Promise<TokenResponseBody|undefined> {
+    logger.debug('refreshing access token...');
+    try {
+      let access:Response<TokenResponseBody> = await got.post(tokenUrl, {form:{
+        'grant_type': 'refresh_token',
+        'client_id': clientId,
+        'client_secret': consumerSecret,
+        'refresh_token': refreshToken
+      }, responseType:'json'});
+      logger.debug('response from access token request: '+access?.statusCode);
+      if(access.statusCode==200) return access.body;
+    } catch(error) {
+      logger.error('error refreshing access token: '+error);
+    }
+    return undefined;
+  }
+
   static genQueryString(params:any):string {
 		let query_string:string="";
 		for(let param in params) {

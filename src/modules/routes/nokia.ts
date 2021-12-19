@@ -1,8 +1,7 @@
 import logger from '../../winston';
 import { FastifyInstance } from 'fastify';
 import * as crypto from 'crypto';
-import { Callback, CallbackType, NokiaId, NokiaIdType, PatientId, PatientIdType, TokenResponseBody } from '../types/nokia'
-import { NokiaDocument } from '../db/models/nokia';
+import { Callback, CallbackType, PatientId, PatientIdType, TokenResponseBody } from '../types/nokia'
 import Nokia from '../lib/nokia';
 
 export default async(server:FastifyInstance) => {
