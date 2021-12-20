@@ -2,10 +2,10 @@ doctype html
 html(lang="en" class="notranslate" translate="no")
   head
     meta(name="robots" content="noindex, nofollow")
-    script(src="/assets/js/js.js")
+    script(src="/nokia/assets/js/js.js")
     script.
       ready(function(event) { 
-        sendPostRequest("/nokia/setIdCookie", '{"patientId":"00ABC"}', function(response) {
+        sendPostRequest("/nokia/setIdCookie", '{"patientId":"foo"}', function(response) {
           console.log(response);
         });
       });

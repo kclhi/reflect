@@ -91,7 +91,7 @@ export default async() => {
   app.register(cookie, {secret:app.config.COOKIE_SECRET} as FastifyCookieOptions);
 
   // views
-  app.register(fastifyStatic, {root:join(__dirname, 'public'), prefix:'/assets/'});
+  app.register(fastifyStatic, {root:join(__dirname, 'public'), prefix:'/nokia/assets/'});
   app.register(fastifyPointOfView, {engine:{pug:pug}, root:join(__dirname, 'views'),});
 
   // routes
