@@ -18,3 +18,12 @@ export interface ContextPayload {
   send(result: unknown): this;
   err(error: Error): this;
 }
+
+export interface BloodPressureReading {
+  identifier:string;
+  subject:string;
+  performer:string;
+  dbp:number;
+  sbp:number;
+  hr:number;
+}
