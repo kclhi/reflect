@@ -84,3 +84,12 @@ export interface Config {
     }
   }
 }
+
+export interface BloodPressureReading {
+  identifier:string;
+  subject:string;
+  performer:string;
+  dbp:number;
+  sbp:number;
+  hr:number;
+}
