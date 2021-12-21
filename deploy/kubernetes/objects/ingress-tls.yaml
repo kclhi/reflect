@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1 
+kind: Ingress
+metadata:
+  name: api
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - OPENFAAS_API_URL
+    secretName: API_SECRET
+  rules:
+  - host: OPENFAAS_API_URL
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
+              number: 3000

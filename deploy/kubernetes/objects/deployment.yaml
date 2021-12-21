@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: registry.gitlab.com/kclreflect/api/api:latest
+        env:
+          - name: NODE_EXTRA_CA_CERTS
+            value: "/var/tls/service-ca-cert/service-ca.crt"
+        envFrom:
+          - secretRef:
+              name: ENV_SECRET
+        volumeMounts:
+          - name: service-ca-cert 
+            mountPath: "/var/tls/service-ca-cert"
+            readOnly: true
+        ports:
+        - containerPort: 3000
+      volumes:
+        - name: service-ca-cert 
+          secret:
+            secretName: service-ca-cert 
