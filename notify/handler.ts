@@ -24,7 +24,7 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
     logger.error('error getting patient id: '+error);
   }
 
-  if(!getPatientId.body.patientId) { logger.debug('no patient id, stopping...'); return context.code(200).send(''); }
+  if(!getPatientId?.body.patientId) { logger.debug('no patient id, stopping...'); return context.code(200).send(''); }
   logger.debug('got patient id');
 
   // get access token to get data
@@ -37,7 +37,7 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
     logger.error('error getting token: '+error);
   }
 
-  if(!getToken.body.token) { logger.debug('no token, stopping...'); return context.code(200).send(''); }
+  if(!getToken?.body.token) { logger.debug('no token, stopping...'); return context.code(200).send(''); }
   logger.debug('got token');
 
   // get data
@@ -51,10 +51,10 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
   } catch(error) {
     logger.error('error getting data: '+error);
   }
-  logger.debug(JSON.stringify(getData.body));
+  logger.debug(JSON.stringify(getData?.body));
   logger.debug(JSON.stringify(getData?.body['body']));
 
-  if(!getData.body) { logger.debug('no data, stopping...'); return context.code(200).send(''); }
+  if(!getData?.body) { logger.debug('no data, stopping...'); return context.code(200).send(''); }
   logger.debug('got data');
 
   // parse data
@@ -74,7 +74,7 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
       logger.error('error reading tls information: '+error);
     }
     try {
-      logger.debug('opening connection to queue')
+      logger.debug('opening connection to queue');
       connection = await amqp.connect('amqps://'+process.env.queue_username+':'+process.env.queue_password+'@'+process.env.queue_host, opts);
       let channel:Channel = await connection.createChannel();
       await channel.assertExchange(process.env.exchange_name, 'direct', {durable: false });
