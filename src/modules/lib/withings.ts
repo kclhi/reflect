@@ -1,8 +1,8 @@
 import got, { Response } from 'got';
-import { TokenResponseBody, NotificationSubscription } from '../types/nokia'
+import { TokenResponseBody, NotificationSubscription } from '../types/withings'
 import logger from '../../winston';
 
-export default class Nokia {
+export default class Withings {
 
   static async getAccessToken(tokenUrl:string, clientId:string, consumerSecret:string, callbackBaseUrl:string, code:string):Promise<TokenResponseBody|undefined> {
     try {
@@ -12,7 +12,7 @@ export default class Nokia {
         'client_id': clientId,
         'client_secret': consumerSecret,
         'code': code,
-        'redirect_uri': callbackBaseUrl+'/nokia/callback'
+        'redirect_uri': callbackBaseUrl+'/withings/callback'
       }, responseType:'json'});
       logger.debug('response from access token request: '+access?.statusCode);
       if(access.statusCode==200) return access.body;

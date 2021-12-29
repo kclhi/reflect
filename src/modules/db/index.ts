@@ -3,13 +3,13 @@ import { FastifyPluginOptions } from 'fastify';
 import fp from 'fastify-plugin';
 import mongoose from 'mongoose';
 import { Model } from 'mongoose'
-import { NokiaModel, NokiaDocument } from './models/nokia';
+import { WithingsModel, WithingsDocument } from './models/withings';
 import logger from '../../winston'
 import { promises as fs } from 'fs';
 
-export interface Models { Nokia:Model<NokiaDocument>; }
+export interface Models { Withings:Model<WithingsDocument>; }
 export interface Db { models:Models; }
-export interface DbOptions { URL:string, DB_USER:string, DB_PASS:string, DB_PASS_PATH:string, ROOT_CERT_PATH:string; }
+export interface DbOptions { URL:string, DB_USER:string, DB_PASS:string, DB_PASS_PATH:string, DB_ROOT_CERT_PATH:string; }
 
 export default fp<DbOptions>(async(fastify:FastifyInstance, options:FastifyPluginOptions) => {
   mongoose.connection.on('connected', ()=>{logger.info('db connected');});
@@ -19,15 +19,15 @@ export default fp<DbOptions>(async(fastify:FastifyInstance, options:FastifyPlugi
       const db = await mongoose.connect('mongodb://'+options.URL, {
         user:options.DB_USER, 
         pass:options.DB_PASS?options.DB_PASS:(await fs.readFile(options.DB_PASS_PATH, "utf8")),
-        ssl: true,
-        sslValidate: true, 
-        sslCA: options.ROOT_CERT_PATH,
+        ssl:true,
+        sslValidate:true, 
+        sslCA:options.DB_ROOT_CERT_PATH,
         serverSelectionTimeoutMS:1000
       }); 
     }
   } catch(error) { 
-    logger.error('error connecting to db: '+error); 
+    logger.error('error connecting to db: '+error+'. options: '+JSON.stringify(options)); 
   }
-  const models:Models = {Nokia:NokiaModel};
+  const models:Models = {Withings:WithingsModel};
   fastify.decorate('db', {models});
 });

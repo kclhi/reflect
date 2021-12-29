@@ -14,7 +14,14 @@ spec:
   - host: USER_URL
     http:
       paths:
-      - path: /nokia/
+      - path: /device/
+        pathType: Prefix
+        backend:
+          service:
+            name: user
+            port:
+              number: 3000
+      - path: /withings/
         pathType: Prefix
         backend:
           service:

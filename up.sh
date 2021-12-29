@@ -5,7 +5,7 @@ docker tag $(docker images -q user) registry.gitlab.com/kclreflect/user/user:lat
 echo "=> pushing image..."
 docker push registry.gitlab.com/kclreflect/user/user:latest
 # ---------------------------------------------- #
-export $(cat ./deploy/kubernetes/.env | xargs)
+export $(cat .env | xargs)
 kubectl config set-context --current --namespace=$DB_NAMESPACE
 # ---------------------------------------------- #
 echo "=> setting up gitlab container registry keys..."

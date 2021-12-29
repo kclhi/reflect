@@ -2,13 +2,13 @@ doctype html
 html(lang="en" class="notranslate" translate="no")
   head
     meta(name="robots" content="noindex, nofollow")
-    script(src="/nokia/assets/js/js.js")
+    script(src="/device/assets/js/js.js")
     script.
       ready(function(event) { 
-        sendPostRequest("/nokia/setIdCookie", '{"patientId":"foo"}', function(response) {
+        sendPostRequest("/device/setIdCookie", '{"patientId":"foo"}', function(response) {
           console.log(response);
         });
       });
   body
-    a(href=nokiaRedirectUrl)
-      | nokia
+    a(href=withingsRedirectUrl)
+      | withings

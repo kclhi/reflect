@@ -1,6 +1,6 @@
 export default interface Config
 {
-  NOKIA: {
+  WITHINGS: {
     AUTHORISATION_URL:string,
     CALLBACK_BASE_URL:string,
     TOKEN_URL:string,
