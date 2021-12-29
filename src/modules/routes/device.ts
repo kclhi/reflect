@@ -13,6 +13,7 @@ export default async(server:FastifyInstance) => {
   }});
 
   server.route<{Body:PatientIdType}>({url:'/setIdCookie', method:['POST'], schema:{body:PatientId}, handler:(req, rep)=>{
+    logger.debug('received id: '+req.body.patientId);
     rep.setCookie(server.config.PATIENT_ID_COOKIE, req.body.patientId, {path:'/', httpOnly:true, secure:true, signed:true}).send()
   }});
 

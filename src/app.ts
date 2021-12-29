@@ -27,7 +27,8 @@ declare module 'fastify' {
       DB_USER:string, 
       DB_PASS:string, 
       DB_PASS_PATH:string, 
-      DB_ROOT_CERT_PATH:string, 
+      DB_ROOT_CERT_PATH:string,
+      API_URL:string,
       USER:string, 
       PASSWORD:string, 
       WITHINGS_CLIENT_ID:string,
@@ -35,8 +36,7 @@ declare module 'fastify' {
       WITHINGS_AUTHORISATION_URL:string, 
       WITHINGS_CALLBACK_BASE_URL:string, 
       WITHINGS_TOKEN_URL:string,
-      WITHINGS_SUBSCRIPTION_URL:string,
-      API_URL:string
+      WITHINGS_SUBSCRIPTION_URL:string
     },
     db:Db;
   }
@@ -59,6 +59,7 @@ export default async() => {
     DB_PASS:{type:'string', default:''},
     DB_PASS_PATH:{type:'string', default:''},
     DB_ROOT_CERT_PATH: {type:'string', default:''},
+    API_URL:{type:'string'},
     USER:{type:'string', default:'user'},
     PASSWORD:{type:'string', default:'pass'},
     WITHINGS_CLIENT_ID:{type:'string', default:''},
@@ -66,8 +67,7 @@ export default async() => {
     WITHINGS_AUTHORISATION_URL:{type:'string', default:config.WITHINGS.AUTHORISATION_URL},
     WITHINGS_CALLBACK_BASE_URL:{type:'string', default:config.WITHINGS.CALLBACK_BASE_URL},
     WITHINGS_TOKEN_URL:{type:'string', default:config.WITHINGS.TOKEN_URL},
-    WITHINGS_SUBSCRIPTION_URL:{type:'string', default:config.WITHINGS.SUBSCRIPTION_URL},
-    API_URL:{type:'string'}
+    WITHINGS_SUBSCRIPTION_URL:{type:'string', default:config.WITHINGS.SUBSCRIPTION_URL}
   }}});
   logger.debug('config: '+JSON.stringify(app.config));
 
@@ -75,7 +75,7 @@ export default async() => {
   await app.register(connect, {URL:app.config.DB_STRING, DB_USER:app.config.DB_USER, DB_PASS:app.config.DB_PASS, DB_PASS_PATH:app.config.DB_PASS_PATH, DB_ROOT_CERT_PATH:app.config.DB_ROOT_CERT_PATH});
 
   // auth
-  const authenticate = {realm:'reflect'}
+  const authenticate = {realm:'reflect'};
   const validate = async(username:string, password:string) => { if(username!==app.config.USER||password!==app.config.PASSWORD) { return new Error('access denied'); } else { return undefined; }};
   await app.register(fastifyBasicAuth, {authenticate, validate} as FastifyBasicAuthOptions);
 

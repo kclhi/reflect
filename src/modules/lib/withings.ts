@@ -23,7 +23,7 @@ export default class Withings {
   }
 
   static async refreshAccessToken(tokenUrl:string, clientId:string, consumerSecret:string, refreshToken:string):Promise<TokenResponseBody|undefined> {
-    logger.debug('refreshing access token...');
+    logger.debug('refreshing access token at '+tokenUrl+' with params: clientId ('+clientId+'), consumerSecret ('+consumerSecret+') and refreshToken ('+refreshToken+')');
     try {
       let access:Response<TokenResponseBody> = await got.post(tokenUrl, {form:{
         'grant_type': 'refresh_token',

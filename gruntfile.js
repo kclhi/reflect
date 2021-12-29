@@ -3,9 +3,12 @@ module.exports = function (grunt) {
     uglify:{files:{src:'src/public/js/*.js', dest:'build/public/js', mangle:true, expand:true, flatten:true}},
     watch:{
       js:{files:'src/public/js/*.js', tasks:['uglify']}, 
-      views:{files:'src/views/*.pug', tasks:['copy']}},
+      views:{files:'src/views/*.pug', tasks:['copy']},
+      images:{files:'src/public/images/*.*', tasks:['copy']}
+    },
     copy:{
       views:{expand:true, flatten:true, src:'src/views/*', dest:'build/views/', filter:'isFile'},
+      images:{expand:true, flatten:true, src:'src/public/images/*', dest:'build/public/images/', filter:'isFile'},
       config:{expand: true, cwd:'src', src:['**/*.json'], dest:'build/', filter:'isFile'}
     }
   });
