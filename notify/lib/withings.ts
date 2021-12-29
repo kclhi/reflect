@@ -1,6 +1,6 @@
-import { NokiaData } from "../types";
+import { WithingsData } from "../types";
 
-export default class Nokia {
+export default class Withings {
   
   static genQueryString(params:any):string {
     let query_string:string='';
@@ -11,7 +11,7 @@ export default class Nokia {
     return query_string.substring(0, query_string.length-1);
   }
 
-  static translate(data:NokiaData):NokiaData {
+  static translate(data:WithingsData):WithingsData {
     for(let key of Object.keys(data)) {
       if(data[key]!=null&&typeof data[key]==='object') this.translate(data[key]);
       if(key=='type') {

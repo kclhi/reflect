@@ -49,7 +49,7 @@ export interface MeasureGroup {
   measures:Array<Measure>;
 }
 
-export interface NokiaData {
+export interface WithingsData {
   updatetime:number;
   timezone:string;
   measuregrps:Array<MeasureGroup>;
@@ -57,7 +57,7 @@ export interface NokiaData {
 }
 
 export interface Config {
-  NOKIA_API_DATA:{
+  WITHINGS_API_DATA:{
     TYPES:{
       getmeas:string,
       getactivity:string, 

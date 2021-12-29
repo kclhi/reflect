@@ -7,7 +7,7 @@ import mockFs from 'mock-fs';
 import path from 'path';
 import nock from 'nock';
 import { promises as fs } from 'fs';
-import { Config, NokiaData, Notification } from '../types';
+import { Config, WithingsData, Notification } from '../types';
 
 describe('handler', function() {
   
@@ -17,14 +17,14 @@ describe('handler', function() {
     // test data
     let notification:Notification = {"userid":"616","startdate":716,"enddate":816,"appli":4}; 
     this.notification = {"body":notification};
-    let nokiaDataResponse:NokiaData = JSON.parse(await fs.readFile(path.resolve(__dirname, './fixtures/nokia-data-response.json'), 'utf8'));
-    this.nokiaDataResponse = nokiaDataResponse;
+    let withingsDataResponse:WithingsData = JSON.parse(await fs.readFile(path.resolve(__dirname, './fixtures/withings-data-response.json'), 'utf8'));
+    this.withingsDataResponse = withingsDataResponse;
     proxyquire.noPreserveCache();
     // queue mock
     this.handler = proxyquire('../handler', {'amqplib':require('mock-amqplib')});
     // fs mock
     let config:Config = JSON.parse(await fs.readFile(path.resolve(__dirname, '../config.json'), 'utf-8')) as Config;
-    config.NOKIA_API_DATA.URLS.getmeas='https://mocked';
+    config.WITHINGS_API_DATA.URLS.getmeas='https://mocked';
     mockFs({
       '/tls': {'cert.crt': 'foo', 'key.key': 'bar', 'ca.pem': 'baz'},
       'node_modules': mockFs.load(path.resolve(__dirname, '../node_modules')),
@@ -75,7 +75,7 @@ describe('handler', function() {
     let context:FunctionContext = new FunctionContext();
     nock(process.env.internal_service_url).post('/id').reply(200, {'patientId':'foo'});
     nock(process.env.internal_service_url).post('/token').reply(200, {'token':'bar'});
-    nock(process.env.internal_service_url).get('/').query({'access_token':'bar', 'action':'getmeas', 'userid':'616', 'startdate':'716', 'enddate':'816'}).reply(200, this.nokiaDataResponse);
+    nock(process.env.internal_service_url).get('/').query({'access_token':'bar', 'action':'getmeas', 'userid':'616', 'startdate':'716', 'enddate':'816'}).reply(200, this.withingsDataResponse);
     await this.handler.default(event, context);
     expect(context.statusCode).to.equal(200);
   }).timeout(0);
