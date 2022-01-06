@@ -17,5 +17,4 @@ FROM gcr.io/distroless/nodejs:16
 WORKDIR /usr/app
 COPY --from=ts-remover /usr/app ./
 USER 1000
-ENV NODE_ENV=production
 CMD ["server.js"]

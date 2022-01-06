@@ -47,7 +47,17 @@ export default async() => {
   const app = fastify({logger:true});
 
   // config
-  let config:Config = process.env.NODE_ENV=="production"?merge(require('./config/config.json'), require('./config/production.config.json')):merge(require('./config/config.json'), require('./config/development.config.json'));
+  let config:Config;
+  switch(process.env.NODE_ENV) {
+    case 'production':
+      config=merge(require('./config/config.json'), require('./config/production.config.json'));
+      break;
+    case 'staging':
+      config=merge(require('./config/config.json'), require('./config/staging.config.json'));
+      break;
+    default:
+      config=merge(require('./config/config.json'), require('./config/development.config.json'));
+  }
 
   // env
   await app.register(fastifyEnv, {dotenv:true, schema:{type:'object', properties:{

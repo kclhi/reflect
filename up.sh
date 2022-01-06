@@ -5,7 +5,8 @@ docker tag $(docker images -q user) registry.gitlab.com/kclreflect/user/user:lat
 echo "=> pushing image..."
 docker push registry.gitlab.com/kclreflect/user/user:latest
 # ---------------------------------------------- #
-export $(cat .env | xargs)
+export ENV_FILE="${1:-.env}"
+export $(cat $ENV_FILE | xargs)
 kubectl config set-context --current --namespace=$DB_NAMESPACE
 # ---------------------------------------------- #
 echo "=> setting up gitlab container registry keys..."
@@ -16,7 +17,7 @@ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "gitlab-
 # ---------------------------------------------- #
 echo "=> creating secret for deployment..."
 kubectl delete secret ${ENV_SECRET}
-kubectl create secret generic ${ENV_SECRET} --from-env-file=./deploy/kubernetes/.env
+kubectl create secret generic ${ENV_SECRET} --from-env-file=./deploy/kubernetes/$ENV_FILE
 # ---------------------------------------------- #
 echo "=> (re)deploying user..."
 kubectl delete deploy user
