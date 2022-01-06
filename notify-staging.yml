@@ -1,0 +1,17 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://services.staging.reflectproject.co.uk
+functions:
+  notify:
+    lang: typescript-fastify
+    handler: ./notify
+    image: registry.gitlab.com/kclreflect/device/notify:latest
+    secrets:
+      - queue-cert
+      - ${QUEUE_CLIENT_SECRET:-queue-client-tls}
+      - service-ca-cert
+    environment_file:
+      - env-staging.notify.yml
+    environment:
+      NODE_EXTRA_CA_CERTS: /var/openfaas/secrets/service-ca.crt
