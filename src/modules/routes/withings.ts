@@ -15,7 +15,7 @@ export default async(server:FastifyInstance) => {
           logger.debug('received info for user. updating db...');
           try {
             const {Withings} = server.db.models;
-            await Withings.updateOne({'_id':req.unsignCookie(req.cookies[server.config.PATIENT_ID_COOKIE]).value||undefined}, {'withingsId':access.userid, 'token':access.access_token, 'refresh':access.refresh_token}, {upsert:true}); 
+            await Withings.updateOne({'_id':'u'+req.unsignCookie(req.cookies[server.config.PATIENT_ID_COOKIE]).value||undefined}, {'withingsId':access.userid, 'token':access.access_token, 'refresh':access.refresh_token}, {upsert:true}); 
             logger.debug('db updated.');
           } catch(error) { 
             logger.error('error updating withings credentials: '+error); 

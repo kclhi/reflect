@@ -6,18 +6,24 @@ html(lang="en" class="notranslate" translate="no")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer")
     script(src="/device/assets/js/js.js")
     script.
-      ready(function(event) { nhsFieldCheck(); nhsClick(); });
+      ready(function(event) { 
+        if(new URL(window.location).hash=='#connect') showConnect();
+        nhsFieldCheck();
+        addNhsFieldCheck();
+        addNhsClick();
+        addBackNhsClick(); 
+      });
   body
     div(class="columns is-vcentered" style="height:90vh;")
-        div(class="column is-1 is-offset-4")
+        div(class="column is-2 is-offset-3")
           img(class="image" src="/device/assets/images/kcl.png")
           img(class="image" src="/device/assets/images/metadvice.png")
-        div(class="column is-3")
+        div(class="column is-4")
           div(id="nhs")
             div(class="field")
               label(class="label") NHS number
               div(class="control has-icons-left has-icons-right")
-                input(id="nhs-input" class="input" type="text" placeholder="" value="")
+                input(id="nhs-input" class="input" type="text" placeholder="000 000 0000" value=patientId)
                 span(class="icon is-small is-left")
                   i(class="fas fa-user")
                 span(class="icon is-small is-right nhs-warning" style="display:none;")
@@ -34,4 +40,7 @@ html(lang="en" class="notranslate" translate="no")
                 div(class="column is-half")
                   a(href=withingsRedirectUrl)
                     img(class="image" src="/device/assets/images/withings.jpg" style="border: 1px solid;")
+            div(class="field is-grouped")
+              div(class="control")
+                button(id="nhs-back" class="button is-link") Back
     
