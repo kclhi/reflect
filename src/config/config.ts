@@ -1,1 +1,5 @@
-export default interface Config { }
+export default interface Config { 
+  SWAGGER: {
+    HOSTNAME:string
+  }
+}

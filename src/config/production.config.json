@@ -1,1 +1,5 @@
-{}
+{
+  "SWAGGER": {
+    "HOST":"services.reflectproject.co.uk"
+  }
+}
