@@ -1,4 +1,4 @@
-export $(cat .env | xargs)
+export $(cat ${1:-.env} | xargs)
 # ---------------------------------------------- #
 kubectl config set-context --current --namespace=$API_NAMESPACE
 echo "=> setting up service..."

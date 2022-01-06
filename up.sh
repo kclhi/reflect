@@ -5,7 +5,8 @@ docker tag $(docker images -q user) registry.gitlab.com/kclreflect/api/api:lates
 echo "=> pushing image..."
 docker push registry.gitlab.com/kclreflect/api/api:latest
 # ---------------------------------------------- #
-export $(cat .env | xargs)
+export ENV_FILE="${1:-.env}"
+export $(cat $ENV_FILE | xargs)
 kubectl config set-context --current --namespace=$API_NAMESPACE
 # ---------------------------------------------- #
 echo "=> setting up gitlab container registry keys..."
@@ -19,7 +20,7 @@ kubectl create secret generic service-ca-cert --from-literal=service-ca.crt="$(k
 # ---------------------------------------------- #
 echo "=> creating secret for deployment..."
 kubectl delete secret ${ENV_SECRET}
-kubectl create secret generic ${ENV_SECRET} --from-env-file=./deploy/kubernetes/.env
+kubectl create secret generic ${ENV_SECRET} --from-env-file=./deploy/kubernetes/$ENV_FILE
 # ---------------------------------------------- #
 echo "=> (re)deploying api..."
 kubectl delete deploy api
