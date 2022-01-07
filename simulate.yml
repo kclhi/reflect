@@ -1,0 +1,15 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://services.reflectproject.co.uk
+functions:
+  simulate:
+    lang: typescript-fastify
+    handler: ./simulate
+    image: registry.gitlab.com/kclreflect/device/simulate:latest
+    secrets:
+      - queue-cert
+      - ${QUEUE_CLIENT_SECRET:-queue-client-tls}
+    environment_file:
+      - env.notify.yml
+
