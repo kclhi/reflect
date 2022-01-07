@@ -60,9 +60,9 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
   // parse data
   let translatedBodyData:WithingsData = Withings.translate(getData.body['body']);
   logger.debug(JSON.stringify(translatedBodyData));
-  let sbp:number = translatedBodyData.measuregrps[0]?.measures?.filter((measure)=>measure.type?.toLowerCase().includes('systolic'))[0]?.value;
-  let dbp:number = translatedBodyData.measuregrps[0]?.measures?.filter((measure)=>measure.type?.toLowerCase().includes('diastolic'))[0]?.value;
-  let hr:number = translatedBodyData.measuregrps[0]?.measures?.filter((measure)=>measure.type?.toLowerCase().includes('heart'))[0]?.value;
+  let sbp:number = Withings.getReading(translatedBodyData, 'systolic');
+  let dbp:number = Withings.getReading(translatedBodyData, 'diastolic');
+  let hr:number = Withings.getReading(translatedBodyData, 'heart');
 
   // send data
   if(sbp&&dbp&&hr) {

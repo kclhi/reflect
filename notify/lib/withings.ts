@@ -1,4 +1,4 @@
-import { WithingsData } from "../types";
+import { Measure, WithingsData } from "../types";
 
 export default class Withings {
   
@@ -42,6 +42,11 @@ export default class Withings {
       }
     };
     return data;
+  }
+
+  static getReading(data:WithingsData, reading:string):number {
+    let measure:Measure = data.measuregrps[0]?.measures?.filter((measure)=>measure.type?.toLowerCase().includes(reading))[0];
+    return measure.value*Math.pow(10, measure.power_of_ten_multiplier);
   }
 
 }
