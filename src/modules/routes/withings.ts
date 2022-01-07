@@ -28,7 +28,7 @@ export default async(server:FastifyInstance) => {
           }
         } 
       }
-      rep.code(200).send();
+      rep.view('callback.pug');
     }
   });
 
