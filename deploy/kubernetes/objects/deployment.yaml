@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: user
-        image: registry.gitlab.com/kclreflect/user/user:latest
+        image: registry.gitlab.com/kclreflect/containers/user:latest
         envFrom:
           - secretRef:
               name: ENV_SECRET

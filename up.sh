@@ -1,9 +1,9 @@
 echo "=> building image..."
 docker build -t user .
-docker rmi registry.gitlab.com/kclreflect/user/user:latest
-docker tag $(docker images -q user) registry.gitlab.com/kclreflect/user/user:latest
+docker rmi registry.gitlab.com/kclreflect/containers/user:latest
+docker tag $(docker images -q user) registry.gitlab.com/kclreflect/containers/user:latest
 echo "=> pushing image..."
-docker push registry.gitlab.com/kclreflect/user/user:latest
+docker push registry.gitlab.com/kclreflect/containers/user:latest
 # ---------------------------------------------- #
 export ENV_FILE="${1:-.env}"
 export $(cat $ENV_FILE | xargs)
@@ -25,3 +25,4 @@ sed -e 's|DB_PASS_SECRET|'"${DB_PASS_SECRET}"'|g' ./deploy/kubernetes/objects/de
 # ---------------------------------------------- #
 kubectl get pods
 kubectl config set-context --current --namespace=default
+echo "=> WARN: have mongodb credentials been set/updated?"
