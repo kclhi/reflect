@@ -1,9 +1,9 @@
 echo "=> building image..."
 docker build -t user .
-docker rmi registry.gitlab.com/kclreflect/api/api:latest
-docker tag $(docker images -q user) registry.gitlab.com/kclreflect/api/api:latest
+docker rmi registry.gitlab.com/kclreflect/containers/api:latest
+docker tag $(docker images -q user) registry.gitlab.com/kclreflect/containers/api:latest
 echo "=> pushing image..."
-docker push registry.gitlab.com/kclreflect/api/api:latest
+docker push registry.gitlab.com/kclreflect/containers/api:latest
 # ---------------------------------------------- #
 export ENV_FILE="${1:-.env}"
 export $(cat $ENV_FILE | xargs)

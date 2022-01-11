@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: registry.gitlab.com/kclreflect/api/api:latest
+        image: registry.gitlab.com/kclreflect/containers/api:latest
         env:
           - name: NODE_EXTRA_CA_CERTS
             value: "/var/tls/service-ca-cert/service-ca.crt"
