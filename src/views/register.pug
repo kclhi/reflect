@@ -13,7 +13,10 @@ block pageJS
 block content
   div(id="nhs")
     div(class="field")
-      label(class="label") NHS number
+      label(class="label") 
+        | NHS number 
+        span(data-tooltip="Your 10-digit UK National Health Service identification number")
+          i(class="fas fa-question-circle" style="opacity:0.25;")
       div(class="control has-icons-left has-icons-right")
         input(id="nhs-input" class="input" type="text" placeholder="000 000 0000" value=patientId)
         span(class="icon is-small is-left")
@@ -27,11 +30,16 @@ block content
         button(id="nhs-next" class="button is-link" disabled) Next
   div(id="connect" style="display:none;")
     div(class="field")
-      label(class="label") Select service:
+      label(class="label") 
+        | Select service 
+        span(data-tooltip="Select the manufacturer of the device you wish to connect")
+          i(class="fas fa-question-circle" style="opacity:0.25;")
       div(class="columns is-vcentered")
-        div(class="column is-half")
+        div(class="column is-one-half")
           a(href=withingsRedirectUrl)
-            img(class="image" src="/device/assets/images/withings.jpg" style="border: 1px solid;")
+            img(class="image" src="/device/assets/images/withings.jpg" style="border: 1px solid")
+        div(class="column is-one-half")
+          img(class="image" src="/device/assets/images/garmin.jpg" style="border: 1px solid")
     div(class="field is-grouped")
       div(class="control")
         button(id="nhs-back" class="button is-link") Back
