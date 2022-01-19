@@ -56,7 +56,7 @@ describe('handler', function() {
   it('should respond when no token', async function() {
     let event:FunctionEvent = new FunctionEvent(this.notification as FastifyRequest);
     let context:FunctionContext = new FunctionContext();
-    nock(process.env.internal_service_url).post('/id').reply(200, {'patientId':'foo'});
+    nock(process.env.internal_service_url).post('/id/withings').reply(200, {'patientId':'foo'});
     await this.handler.default(event, context);
     expect(context.statusCode).to.equal(200);
   }).timeout(0);
@@ -64,7 +64,7 @@ describe('handler', function() {
   it('should respond when no body', async function() {
     let event:FunctionEvent = new FunctionEvent(this.notification as FastifyRequest);
     let context:FunctionContext = new FunctionContext();
-    nock(process.env.internal_service_url).post('/id').reply(200, {'patientId':'foo'});
+    nock(process.env.internal_service_url).post('/id/withings').reply(200, {'patientId':'foo'});
     nock(process.env.internal_service_url).post('/token').reply(200, {'token':'bar'});
     await this.handler.default(event, context);
     expect(context.statusCode).to.equal(200);

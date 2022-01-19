@@ -59,27 +59,27 @@ export interface WithingsData {
 export interface Config {
   WITHINGS_API_DATA:{
     TYPES:{
-      getmeas:string,
-      getactivity:string, 
-      getintradayactivity:string, 
+      getmeas:string;
+      getactivity:string; 
+      getintradayactivity:string; 
       getsummary:string
     },
   	URLS:{
-      getmeas:string, 
-      getactivity:string, 
-      getintradayactivity:string, 
+      getmeas:string; 
+      getactivity:string; 
+      getintradayactivity:string; 
       getsummary:string
     },
   	START:{
-      getmeas:string,
-      getactivity:string, 
-      getintradayactivity:string, 
+      getmeas:string;
+      getactivity:string; 
+      getintradayactivity:string; 
       getsummary:string
     },
   	END:{
-      getmeas:string, 
-      getactivity:string, 
-      getintradayactivity:string, 
+      getmeas:string; 
+      getactivity:string; 
+      getintradayactivity:string; 
       getsummary:string
     }
   }
