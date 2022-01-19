@@ -6,12 +6,17 @@ functions:
   notify:
     lang: typescript-fastify
     handler: ./notify
-    image: registry.gitlab.com/kclreflect/device/notify:latest
+    image: registry.gitlab.com/kclreflect/containers/notify:latest
     secrets:
       - queue-cert
       - ${QUEUE_CLIENT_SECRET:-queue-client-tls}
       - service-ca-cert
     environment_file:
-      - env.notify.yml
+      - env.yml
     environment:
+      write_debug: "false"
+      read_debug: "false"
       NODE_EXTRA_CA_CERTS: /var/openfaas/secrets/service-ca.crt
+    labels:
+     com.openfaas.scale.min: 5
+     com.openfaas.scale.max: 5

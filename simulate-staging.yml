@@ -6,10 +6,10 @@ functions:
   simulate:
     lang: typescript-fastify
     handler: ./simulate
-    image: registry.gitlab.com/kclreflect/device/simulate:latest
+    image: registry.gitlab.com/kclreflect/containers/simulate:latest
     secrets:
       - queue-cert
       - ${QUEUE_CLIENT_SECRET:-queue-client-tls}
     environment_file:
-      - env-staging.notify.yml
+      - env-staging.yml
 
