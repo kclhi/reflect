@@ -11,7 +11,11 @@ import { WithingsModel } from '../src/modules/db/models/withings';
 let handler:dbHandler;
 
 // root-level hooks for all test files
-before(async()=>{handler = await dbHandler.factory(); await handler.connect('reflect');});
+before(async function() {
+  this.timeout(0);
+  handler = await dbHandler.factory(); 
+  await handler.connect('reflect');
+});
 afterEach(async()=>{await handler.clearDatabase();});
 after(async()=>{await handler.closeDatabase();});
 
