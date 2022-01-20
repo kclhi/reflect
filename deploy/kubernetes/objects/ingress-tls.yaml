@@ -28,3 +28,10 @@ spec:
             name: user
             port:
               number: 3000
+      - path: /connect/garmin/
+        pathType: Prefix
+        backend:
+          service:
+            name: user
+            port:
+              number: 3000

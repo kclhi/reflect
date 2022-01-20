@@ -10,11 +10,12 @@ import { WithingsModel } from '../src/modules/db/models/withings';
 
 let handler:dbHandler;
 
-before(async()=>{handler = await dbHandler.factory(); await handler.connect();});
-afterEach(async()=>await handler.clearDatabase());
+// root-level hooks for all test files
+before(async()=>{handler = await dbHandler.factory(); await handler.connect('reflect');});
+afterEach(async()=>{await handler.clearDatabase();});
 after(async()=>{await handler.closeDatabase();});
 
-describe('user', () => {
+describe('user - withings', () => {
   
   const accessTokenResponse = {access_token:'foo', expires_in:616, token_type:'bar', scope:'baz', refresh_token:'qux', userid:'quux'};
 
@@ -29,37 +30,37 @@ describe('user', () => {
     const setIdCookie = await app.inject({method:'POST', url:'/device/setIdCookie', payload:{'patientId':'quuz'}});
     const addUser = await app.inject({method:'GET', url:'/withings/callback?code=00DEF&state=XYZ', cookies:{[app.config.PATIENT_ID_COOKIE]:cookieParser.parseString(setIdCookie.headers['set-cookie']?.toString()||'').value}});
     expect(addUser.statusCode).to.equal(200);
-    expect(await WithingsModel.find({'_id':'quuz'})).to.have.lengthOf(1);
+    expect(await WithingsModel.find({'_id':'uquuz'})).to.have.lengthOf(1);
   }
   
-  it('can create user', async() => {
+  it('can create withings user', async() => {
     const app = await build();
     init();
     await getUserCredentials(app);
     ImportMock.restore();
   }).timeout(0);
 
-  it('can get user', async() => {
+  it('can get withings user', async() => {
     const app = await build();
     init();
     await getUserCredentials(app);
-    const getUser = await app.inject({method:'POST', url:'/internal/id', payload:{'withingsId':'quux'}});
+    const getUser = await app.inject({method:'POST', url:'/internal/id/withings', payload:{'vendorId':'quux'}});
     expect(getUser.statusCode).to.equal(200);
-    expect(getUser.body).to.equal('{"patientId":"quuz"}');
+    expect(getUser.body).to.equal('{"patientId":"uquuz"}');
     ImportMock.restore();
   }).timeout(0);
 
-  it('can get token', async() => {
+  it('can get withings token', async() => {
     const app = await build();
     init();
     await getUserCredentials(app);
-    const getToken = await app.inject({method:'POST', url:'/internal/token', payload:{'withingsId':'quux'}});
+    const getToken = await app.inject({method:'POST', url:'/internal/token', payload:{'vendorId':'quux'}});
     expect(getToken.statusCode).to.equal(200);
     expect(getToken.body).to.equal('{"token":"foo"}');
     ImportMock.restore();
   }).timeout(0);
 
-  it('can create query string', async() => {
+  it('can create withings query string', async() => {
     expect(Withings.genQueryString({action:'foo', actionBar:'baz', qux:'quux'})).to.equal('action=foo&actionBar=baz&oauth_qux=quux');
   }).timeout(0);
 

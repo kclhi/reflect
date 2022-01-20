@@ -1,20 +1,24 @@
 import logger from '../../winston';
 import { FastifyInstance } from 'fastify';
-import { WithingsId, WithingsIdType, PatientId, PatientIdType, Token, TokenResponseBody, TokenType } from '../types/withings';
+import { PatientId, PatientIdType, VendorId, VendorIdType } from '../types/types';
+import { Token, TokenResponseBody, TokenType } from '../types/withings';
 import { WithingsDocument } from '../db/models/withings';
 import WithingsUtils from '../lib/withings';
+import { GarminDocument } from '../db/models/garmin';
 
 export default async(server:FastifyInstance) => {
 
-  server.route<{Body:WithingsIdType, Reply:PatientIdType}>({
-    url:'/id', method:['POST'], schema:{body:WithingsId, response:{200:PatientId}},
+  server.addHook('onRequest', process.env.NODE_ENV&&process.env.NODE_ENV=="test"?(_req:any, _rep:any, done:any)=>{done()}:server.basicAuth);
+  
+  server.route<{Body:VendorIdType, Reply:PatientIdType}>({
+    url:'/id/withings', method:['POST'], schema:{body:VendorId, response:{200:PatientId}},
     handler: async(req, rep) => {
       const {body:withings} = req;
       const {Withings} = server.db.models;
       let users:Array<WithingsDocument> = [];
       logger.debug('about to extract id of patient...');
       try { 
-        users = await Withings.find({'_id':{$ne:undefined}, 'withingsId':withings.withingsId});
+        users = await Withings.find({'_id':{$ne:undefined}, 'withingsId':withings.vendorId});
       } catch(error) { 
         logger.error('error getting withings credentials: '+error); 
       }
@@ -23,15 +27,15 @@ export default async(server:FastifyInstance) => {
     }
   });
 
-  server.route<{Body:WithingsIdType, Reply:TokenType}>({
-    url:'/token', method:['POST'], schema:{body:WithingsId, response:{200:Token}},
+  server.route<{Body:VendorIdType, Reply:TokenType}>({
+    url:'/token', method:['POST'], schema:{body:VendorId, response:{200:Token}},
     handler: async(req, rep) => {
       const {body:withings} = req;
       // get user from supplied withings id
       const {Withings} = server.db.models;
       let user:WithingsDocument|null = null;
       try { 
-        user = await Withings.findOne({'_id':{$ne:undefined}, 'withingsId':withings.withingsId});
+        user = await Withings.findOne({'_id':{$ne:undefined}, 'withingsId':withings.vendorId});
         logger.debug('got credentials.')
       } catch(error) { 
         logger.error('error getting withings credentials: '+error); 
@@ -50,6 +54,23 @@ export default async(server:FastifyInstance) => {
       }
       // return token
       return rep.code(200).send(user?.token?{'token':access.access_token}:{'token':''});
+    }
+  });
+
+  server.route<{Body:VendorIdType, Reply:PatientIdType}>({
+    url:'/id/garmin', method:['POST'], schema:{body:VendorId, response:{200:PatientId}},
+    handler: async(req, rep) => {
+      const {body:garmin} = req;
+      const {Garmin} = server.db.models;
+      let users:Array<GarminDocument> = [];
+      logger.debug('about to extract id of patient...');
+      try { 
+        users = await Garmin.find({'_id':{$ne:undefined}, 'access_token':garmin.vendorId});
+      } catch(error) { 
+        logger.error('error getting garmin credentials: '+error); 
+      }
+      logger.debug('extracted '+users.length+' records with this id.');
+      rep.code(200).send(users.length?{'patientId':users[0]._id}:{'patientId':''});
     }
   });
 

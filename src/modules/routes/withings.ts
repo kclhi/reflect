@@ -5,6 +5,8 @@ import Withings from '../lib/withings';
 
 export default async(server:FastifyInstance) => {
 
+  server.addHook('onRequest', process.env.NODE_ENV&&process.env.NODE_ENV=="test"?(_req:any, _rep:any, done:any)=>{done()}:server.basicAuth);
+  
   server.route<{Querystring:CallbackType}>({
     url: '/callback', method:['GET', 'HEAD'], schema:{querystring:Callback},
     handler: async(req, rep) => {

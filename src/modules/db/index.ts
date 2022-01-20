@@ -4,10 +4,11 @@ import fp from 'fastify-plugin';
 import mongoose from 'mongoose';
 import { Model } from 'mongoose'
 import { WithingsModel, WithingsDocument } from './models/withings';
+import { GarminModel, GarminDocument } from './models/garmin';
 import logger from '../../winston'
 import { promises as fs } from 'fs';
 
-export interface Models { Withings:Model<WithingsDocument>; }
+export interface Models { Withings:Model<WithingsDocument>; Garmin:Model<GarminDocument>; }
 export interface Db { models:Models; }
 export interface DbOptions { URL:string, DB_USER:string, DB_PASS:string, DB_PASS_PATH:string, DB_ROOT_CERT_PATH:string; }
 
@@ -28,6 +29,6 @@ export default fp<DbOptions>(async(fastify:FastifyInstance, options:FastifyPlugi
   } catch(error) { 
     logger.error('error connecting to db: '+error+'. options: '+JSON.stringify(options)); 
   }
-  const models:Models = {Withings:WithingsModel};
+  const models:Models = {Withings:WithingsModel, Garmin:GarminModel};
   fastify.decorate('db', {models});
 });

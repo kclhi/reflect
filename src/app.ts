@@ -5,6 +5,8 @@ import fastifyPointOfView from 'point-of-view';
 import fastifyEnv from 'fastify-env'
 import cookie from 'fastify-cookie'
 import fastifyStatic from 'fastify-static';
+import fastifySession from 'fastify-session';
+import fastifyGrant from 'fastify-grant';
 import pug from 'pug';
 import {join} from 'path';
 import merge from 'lodash.merge';
@@ -12,6 +14,8 @@ import logger from './winston';
 
 import device from './modules/routes/device';
 import withings from './modules/routes/withings';
+import garmin from './modules/routes/garmin';
+import garminExternal from './modules/routes/garmin-external';
 import internal from './modules/routes/internal';
 import connect from './modules/db/index';
 import {Db} from './modules/db/index';
@@ -36,7 +40,10 @@ declare module 'fastify' {
       WITHINGS_AUTHORISATION_URL:string, 
       WITHINGS_CALLBACK_BASE_URL:string, 
       WITHINGS_TOKEN_URL:string,
-      WITHINGS_SUBSCRIPTION_URL:string
+      WITHINGS_SUBSCRIPTION_URL:string,
+      GARMIN_BASE_URL:string,
+      GARMIN_KEY:string,
+      GARMIN_SECRET:string
     },
     db:Db;
   }
@@ -68,7 +75,7 @@ export default async() => {
     DB_USER:{type:'string', default:''}, 
     DB_PASS:{type:'string', default:''},
     DB_PASS_PATH:{type:'string', default:''},
-    DB_ROOT_CERT_PATH: {type:'string', default:''},
+    DB_ROOT_CERT_PATH:{type:'string', default:''},
     API_URL:{type:'string'},
     USER:{type:'string', default:'user'},
     PASSWORD:{type:'string', default:'pass'},
@@ -77,7 +84,10 @@ export default async() => {
     WITHINGS_AUTHORISATION_URL:{type:'string', default:config.WITHINGS.AUTHORISATION_URL},
     WITHINGS_CALLBACK_BASE_URL:{type:'string', default:config.WITHINGS.CALLBACK_BASE_URL},
     WITHINGS_TOKEN_URL:{type:'string', default:config.WITHINGS.TOKEN_URL},
-    WITHINGS_SUBSCRIPTION_URL:{type:'string', default:config.WITHINGS.SUBSCRIPTION_URL}
+    WITHINGS_SUBSCRIPTION_URL:{type:'string', default:config.WITHINGS.SUBSCRIPTION_URL},
+    GARMIN_BASE_URL:{type:'string', default:config.GARMIN.BASE_URL},
+    GARMIN_KEY:{type:'string', default:''},
+    GARMIN_SECRET:{type:'string', default:''}
   }}});
   logger.debug('config: '+JSON.stringify(app.config));
 
@@ -89,8 +99,6 @@ export default async() => {
   const validate = async(username:string, password:string) => { if(username!==app.config.USER||password!==app.config.PASSWORD) { return new Error('access denied'); } else { return undefined; }};
   await app.register(fastifyBasicAuth, {authenticate, validate} as FastifyBasicAuthOptions);
 
-  app.addHook('onRequest', process.env.NODE_ENV&&process.env.NODE_ENV=="test"?(_req:any, _rep:any, done:any)=>{done()}:app.basicAuth);
-
   app.setErrorHandler((err, _req, rep) => { if(err.statusCode===401) { rep.code(401).send('unauthorized'); return; } rep.send(err); });
  
   // cookies
@@ -100,9 +108,26 @@ export default async() => {
   app.register(fastifyStatic, {root:join(__dirname, 'public'), prefix:'/device/assets/'});
   app.register(fastifyPointOfView, {engine:{pug:pug}, root:join(__dirname, 'views'),});
 
+  // garmin plugin registration
+  await app.register(fastifySession, {secret:app.config.COOKIE_SECRET, cookie:{secure:false}});
+  await app.register(fastifyGrant({
+    "defaults": {
+      "origin": app.config.GARMIN_BASE_URL,
+    },
+    "garmin": {
+      "oauth": 1,
+      "key": app.config.GARMIN_KEY,
+      "secret": app.config.GARMIN_SECRET,
+      "scope": ["read", "write"],
+      "callback": "/connect/garmin/done"
+    }
+  }));
+
   // routes
   app.register(device, {prefix:'/device'});
   app.register(withings, {prefix:'/withings'});
+  app.register(garmin, {prefix:'/connect/garmin'});
+  app.register(garminExternal, {prefix:'/connect/garmin'});
   app.register(internal, {prefix:'/internal'});
   
   return app;

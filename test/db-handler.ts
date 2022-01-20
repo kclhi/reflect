@@ -11,10 +11,10 @@ export default class dbHandler {
     return generated;
   };
 
-  async connect() {
+  async connect(dbName:string) {
     if(!this.server) this.server = await MongoMemoryServer.create();
     const uri = this.server.getUri();
-    await mongoose.connect(uri, {dbName:'reflectTest'});
+    await mongoose.connect(uri, {dbName:dbName});
   }
 
   async closeDatabase() {
