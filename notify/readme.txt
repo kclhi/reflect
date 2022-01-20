@@ -1,1 +1,1 @@
-receives notifications from providers
+receives notifications from withings
