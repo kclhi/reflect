@@ -58,16 +58,26 @@ export default class Fhir {
     return measure;
   }
 
-  static createBpResource(subject:string, sbp:number, dbp:number, hr:number):Observation {
+  static createBpResource(subject:string, sbp:number, dbp:number, hr:number, id:string=null):Observation {
     return this.createObservationResource(subject, 'https://loinc.org', '85354-9', 'Blood pressure panel with all children optional', new Array<ObservationComponent>(
       this.createMeasure('http://loinc.org', '8480-6', 'Systolic blood pressure', sbp, 'mmHg'),
       this.createMeasure('http://loinc.org', '8462-4', 'Diastolic blood pressure', dbp, 'mmHg'),
       this.createMeasure('http://loinc.org', '8867-4', 'Heart rate', hr, 'beats/minute')
-    ));
+    ), id);
   }
 
-  static createObservationResource(subjectReferenceId:string, typeSystem:string, typeValue:string, typeDisplay:string, measures:Array<ObservationComponent>):Observation {
+  static createHrResource(subject:string, resting:number, rate:number, intensity:number, id:string=null):Observation {
+    return this.createObservationResource(subject, 'https://loinc.org', '8867-4', 'Heart rate', new Array<ObservationComponent>(
+      this.createMeasure('http://loinc.org', '40443-4', 'Heart rate - resting', resting, 'beats/minute'),
+      this.createMeasure('http://loinc.org', '8867-4', 'Heart rate', rate, 'beats/minute'),
+      this.createMeasure('http://loinc.org', '82290-8', 'Freq aerobic physical activity', intensity, 'beats/minute')
+    ), id);
+  }
+
+  static createObservationResource(subjectReferenceId:string, typeSystem:string, typeValue:string, typeDisplay:string, measures:Array<ObservationComponent>, id:string=null):Observation {
     let observation:Observation = new Observation();
+    /* id */
+    if(id) observation.id = id;
     /* status */
     let status:ObservationStatus = new ObservationStatus();
     status.value = 'final';
@@ -91,7 +101,7 @@ export default class Fhir {
     let dateTime:PrimitiveDateTime = new PrimitiveDateTime;
     dateTime.value = new Date().toISOString();
     observation.effective = dateTime;
-    // /* measures (components) */
+    /* measures (components) */
     observation.component = measures;
     return observation;
   }
