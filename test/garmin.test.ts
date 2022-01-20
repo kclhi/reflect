@@ -1,11 +1,8 @@
 import { expect } from 'chai';
-import dbHandler from './db-handler';
 import cookieParser from 'set-cookie-parser';
 
 import build from '../src/app';
 import { GarminModel } from '../src/modules/db/models/garmin';
-
-let handler:dbHandler;
 
 describe('user - garmin', () => {
 

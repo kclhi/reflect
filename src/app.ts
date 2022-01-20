@@ -69,8 +69,8 @@ export default async() => {
   // env
   await app.register(fastifyEnv, {dotenv:true, schema:{type:'object', properties:{
     PORT:{type:'string', default:3000}, 
-    COOKIE_SECRET:{type:'string', default:'secret'}, 
-    PATIENT_ID_COOKIE:{type:'string'},
+    COOKIE_SECRET:{type:'string', default:'UJNtVgKkndwYRwth7Jf2kHNY6nmIJLac'}, 
+    PATIENT_ID_COOKIE:{type:'string', default:'patientId'},
     DB_STRING:{type:'string', default:''},
     DB_USER:{type:'string', default:''}, 
     DB_PASS:{type:'string', default:''},
