@@ -1,0 +1,35 @@
+stages:
+  - dependencies
+  - test_notify
+  - test_simulate
+  - test_ping
+
+cache:
+  paths:
+    - node_modules/
+
+dependencies:
+  image: node:16-alpine
+  stage: dependencies
+  script:
+    - npm install notify/
+    - npm install simulate/
+    - npm install ping/
+  artifacts:
+    paths:
+      - node_modules/
+
+test_notify:
+  image: node:16-alpine
+  stage: test_notify
+  script: npm --prefix notify test
+
+test_simulate:
+  image: node:16-alpine
+  stage: test_simulate
+  script: npm --prefix simulate test
+
+test_ping:
+  image: node:16-alpine
+  stage: test_ping
+  script: npm --prefix ping test

@@ -25,11 +25,14 @@ describe('handler', function() {
     // fs mock
     let config:Config = JSON.parse(await fs.readFile(path.resolve(__dirname, '../config.json'), 'utf-8')) as Config;
     config.WITHINGS_API_DATA.URLS.getmeas='https://mocked';
-    mockFs({
-      '/tls': {'cert.crt': 'foo', 'key.key': 'bar', 'ca.pem': 'baz'},
-      'node_modules': mockFs.load(path.resolve(__dirname, '../node_modules')),
+     // fs mock
+    let mocks:any = {
+      '/tls': {'cert.crt':'foo', 'key.key':'bar', 'ca.pem':'baz'},
       'config.json': JSON.stringify(config)
-    });
+    };
+    try { fs.access('node_modules'); mocks['node_modules']=mockFs.load(path.resolve('node_modules')); } catch(error) {}
+    try { fs.access('../node_modules'); mocks['../node_modules']=mockFs.load('../node_modules'); } catch(error) {}
+    mockFs(mocks);
     // env stub
     this.env = Object.assign({}, process.env);
     process.env.cert_path='/tls/cert.crt';

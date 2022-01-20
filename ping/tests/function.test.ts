@@ -8,6 +8,7 @@ import path from 'path';
 import nock from 'nock';
 import { promises as fs } from 'fs';
 import { Push } from '../types';
+import { Console } from 'winston/lib/winston/transports';
 
 describe('handler', function() {
   
@@ -15,16 +16,16 @@ describe('handler', function() {
 
   before(async function() {
     // test data
-    let notification:Push = JSON.parse(await fs.readFile(path.resolve(__dirname, './fixtures/garmin-notification-data.json'), 'utf8'));
+    let notification:Push = JSON.parse(await fs.readFile(path.resolve('tests/fixtures/garmin-notification-data.json'), 'utf8'));
     this.notification = {"body":notification};
     proxyquire.noPreserveCache();
     // queue mock
     this.handler = proxyquire('../handler', {'amqplib':require('mock-amqplib')});
     // fs mock
-    mockFs({
-      '/tls': {'cert.crt': 'foo', 'key.key': 'bar', 'ca.pem': 'baz'},
-      'node_modules': mockFs.load(path.resolve(__dirname, '../node_modules'))
-    });
+    let mocks:any = {'/tls': {'cert.crt':'foo', 'key.key':'bar', 'ca.pem':'baz'}};
+    try { fs.access('node_modules'); mocks['node_modules']=mockFs.load(path.resolve('node_modules')); } catch(error) {}
+    try { fs.access('../node_modules'); mocks['../node_modules']=mockFs.load('../node_modules'); } catch(error) {}
+    mockFs(mocks);
     // env stub
     this.env = Object.assign({}, process.env);
     process.env.cert_path='/tls/cert.crt';

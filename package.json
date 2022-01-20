@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@types/node": "^17.0.10",
+    "help": "^3.0.2",
+    "openfaas-function": "file:notify",
+    "ping": "^0.4.1"
+  }
+}
