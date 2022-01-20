@@ -41,7 +41,7 @@ export default async() => {
     PASSWORD:{type:'string', default:'pass'},
     PORT:{type:'string', default:3000}, 
     JWT_SECRET:{type:'string', default:'secret'},
-    INTERNAL_API_URL:{type:'string', default:''},
+    INTERNAL_API_URL:{type:'string', default:'mocked'},
     SWAGGER_HOSTNAME:{type:'string', default:config.SWAGGER.HOSTNAME}
   }}});
 
