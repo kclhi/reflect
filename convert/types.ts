@@ -19,11 +19,20 @@ export interface ContextPayload {
   err(error: Error): this;
 }
 
-export interface BloodPressureReading {
+export interface Reading {
   identifier:string;
   subject:string;
   performer:string;
+}
+
+export interface BloodPressureReading extends Reading {
   dbp:number;
   sbp:number;
   hr:number;
+}
+
+export interface HeartRateReading extends Reading {
+  resting:number;
+  rate:number;
+  intensity:number;
 }
