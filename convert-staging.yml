@@ -6,7 +6,7 @@ functions:
   convert:
     lang: typescript-fastify
     handler: ./convert
-    image: registry.gitlab.com/kclreflect/converter/convert:latest
+    image: registry.gitlab.com/kclreflect/containers/convert:latest
     secrets:
       - service-ca-cert
     annotations:
