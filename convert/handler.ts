@@ -7,6 +7,8 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
   const logger = winston.createLogger({level:'info', format:winston.format.simple(), transports:[new winston.transports.Console({stderrLevels:['error']})]});
   let reading:Reading = event.body as Reading;
 
+  if(!event.body) { logger.debug('no request body, stopping...'); return context.code(200).send(''); }
+
   let patientFhirResource:Patient = fhir.createPatientResource(reading.identifier, reading.subject);
   logger.debug(patientFhirResource.toJSON());
   try {
