@@ -7,7 +7,7 @@ export default async(server:FastifyInstance) => {
 
   server.addHook('onRequest', async(req, rep) => { try { await req.jwtVerify() } catch(error) { rep.send(error) }});
 
-  server.route<{Body:PatientIdType, Reply:FHIRResourceType}>({url:'/fhir', method:['POST'], schema:{body:PatientId, response:{200:FHIRResource}, security:[{bearerAuth:[]}]}, handler:async(req, rep)=>{
+  server.route<{Body:PatientIdType, Reply:FHIRResourceType}>({url:'/fhir', method:['POST'], schema:{description:'Collect all the data available on a patient. Formatted as FHIR.', body:PatientId, response:{200:FHIRResource}, security:[{bearerAuth:[]}]}, handler:async(req, rep)=>{
     let getFHIR:Response<string>|undefined;
     try {
       getFHIR = await got.get('https://'+server.config.INTERNAL_API_URL+'/fhir/Observation?subject='+req.body.patientId);

@@ -48,22 +48,12 @@ export default async() => {
   // docs
   app.register(fastifySwagger, {
     routePrefix: '/docs',
-    swagger: {
+    openapi: {
       info: {
         title: 'REFLECT API',
-        description: 'Testing the REFLECT API',
-        version: '0.1.0'
-      },
-      externalDocs: {
-        url: 'https://swagger.io',
-        description: 'Find more info here'
-      },
-      host: app.config.SWAGGER_HOSTNAME,
-      schemes: ['https'],
-      consumes: ['application/json'],
-      produces: ['application/json'],
-    },
-    openapi: {
+        version: '1.0.0',
+        description: 'Test the endpoints offered by the REFLECT API'
+      },    
       components: {
         securitySchemes: {
           bearerAuth: {
