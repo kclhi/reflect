@@ -1,4 +1,4 @@
-import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
+import {IncomingHttpHeaders, OutgoingHttpHeaders} from 'http';
 
 export interface EventPayload {
   body:unknown;
@@ -12,8 +12,8 @@ export interface ContextPayload {
   statusCode:number;
   headerValues:OutgoingHttpHeaders;
   result:unknown;
-  error:Error|null;
-  code(statusCode?: number):this;
+  error:Error | null;
+  code(statusCode?:number):this;
   headers(headerValues?:OutgoingHttpHeaders):this;
   send(result:unknown):this;
   err(error:Error):this;
@@ -26,9 +26,9 @@ export interface Notification {
   appli:number;
 }
 
-export type PatientId = { patientId:string }
+export type PatientId = {patientId:string};
 
-export type Token = { token:string }
+export type Token = {token:string};
 
 export interface Measure {
   value:number;
@@ -44,8 +44,8 @@ export interface MeasureGroup {
   data:number;
   created:number;
   category:string;
-  deviceid:string|null;
-  hash_deviceid:string|null;
+  deviceid:string | null;
+  hash_deviceid:string | null;
   measures:Array<Measure>;
 }
 
@@ -53,36 +53,36 @@ export interface WithingsData {
   updatetime:number;
   timezone:string;
   measuregrps:Array<MeasureGroup>;
-  comment:string|null;
+  comment:string | null;
 }
 
 export interface Config {
   WITHINGS_API_DATA:{
     TYPES:{
       getmeas:string;
-      getactivity:string; 
-      getintradayactivity:string; 
-      getsummary:string
-    },
-  	URLS:{
-      getmeas:string; 
-      getactivity:string; 
-      getintradayactivity:string; 
-      getsummary:string
-    },
-  	START:{
+      getactivity:string;
+      getintradayactivity:string;
+      getsummary:string;
+    };
+    URLS:{
       getmeas:string;
-      getactivity:string; 
-      getintradayactivity:string; 
-      getsummary:string
-    },
-  	END:{
-      getmeas:string; 
-      getactivity:string; 
-      getintradayactivity:string; 
-      getsummary:string
-    }
-  }
+      getactivity:string;
+      getintradayactivity:string;
+      getsummary:string;
+    };
+    START:{
+      getmeas:string;
+      getactivity:string;
+      getintradayactivity:string;
+      getsummary:string;
+    };
+    END:{
+      getmeas:string;
+      getactivity:string;
+      getintradayactivity:string;
+      getsummary:string;
+    };
+  };
 }
 
 export interface BloodPressureReading {
