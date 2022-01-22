@@ -8,10 +8,10 @@ import Withings from './lib/withings';
 export default async(event:EventPayload, context:ContextPayload):Promise<ContextPayload> => {
   const logger = winston.createLogger({level:'debug', format:winston.format.simple(), transports:[new winston.transports.Console({stderrLevels:['error']})]});
   const config:Config = require('./config.json');
-  logger.debug('received notification: '+JSON.stringify(event.body));
 
   // ~mdc send positive response to withings regardless (also acks initial HEAD request from withings when setting up notifications)
   if(!event.body) { logger.debug('no request body, stopping...'); return context.code(200).send(''); }
+  logger.debug('received notification: '+JSON.stringify(event.body));
 
   let notification:Notification = event.body as Notification;
   let userId:string = notification.userid;
@@ -81,7 +81,7 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
       let channel:Channel = await connection.createChannel();
       await channel.assertExchange(process.env.exchange_name, 'direct', {durable: false });
       channel.publish(process.env.exchange_name, process.env.exchange_topic, Buffer.from(JSON.stringify({
-        "identifier":getPatientId.body.patientId,
+        "identifier":null,
         "subject":getPatientId.body.patientId,
         "performer":"da6da8b0-56e5-11e9-8d7b-95e10210fac3",
         "sbp":sbp,
