@@ -1,6 +1,6 @@
-import { FastifyRequest } from "fastify";
-import { IncomingHttpHeaders } from "http";
-import { EventPayload } from "../types";
+import {FastifyRequest} from 'fastify';
+import {IncomingHttpHeaders} from 'http';
+import {EventPayload} from '../types';
 
 export default class Event implements EventPayload {
   body:unknown;
