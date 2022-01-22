@@ -1,4 +1,4 @@
-import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
+import {IncomingHttpHeaders, OutgoingHttpHeaders} from 'http';
 
 export interface EventPayload {
   body:unknown;
@@ -12,8 +12,8 @@ export interface ContextPayload {
   statusCode:number;
   headerValues:OutgoingHttpHeaders;
   result:unknown;
-  error:Error|null;
-  code(statusCode?: number):this;
+  error:Error | null;
+  code(statusCode?:number):this;
   headers(headerValues?:OutgoingHttpHeaders):this;
   send(result:unknown):this;
   err(error:Error):this;
