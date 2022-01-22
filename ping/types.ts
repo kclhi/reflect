@@ -1,25 +1,25 @@
-import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
+import {IncomingHttpHeaders, OutgoingHttpHeaders} from 'http';
 
 export interface EventPayload {
-  body: unknown;
-  headers: IncomingHttpHeaders;
-  method: string;
-  query: unknown;
-  path: string;
+  body:unknown;
+  headers:IncomingHttpHeaders;
+  method:string;
+  query:unknown;
+  path:string;
 }
 
 export interface ContextPayload {
-  statusCode: number;
-  headerValues: OutgoingHttpHeaders;
-  result: unknown;
-  error: Error | null;
-  code(statusCode?: number): this;
-  headers(headerValues?: OutgoingHttpHeaders): this;
-  send(result: unknown): this;
-  err(error: Error): this;
+  statusCode:number;
+  headerValues:OutgoingHttpHeaders;
+  result:unknown;
+  error:Error | null;
+  code(statusCode?:number):this;
+  headers(headerValues?:OutgoingHttpHeaders):this;
+  send(result:unknown):this;
+  err(error:Error):this;
 }
 
-export type PatientId = { patientId:string }
+export type PatientId = {patientId:string};
 
 export interface Daily {
   userId:string;
@@ -54,7 +54,7 @@ export interface Daily {
   lowStressDurationInSeconds:number;
   mediumStressDurationInSeconds:number;
   highStressDurationInSeconds:number;
-  stressQualifier:string
+  stressQualifier:string;
 }
 
 export interface Push {

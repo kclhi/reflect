@@ -1,8 +1,7 @@
-import { OutgoingHttpHeaders } from "http";
-import { ContextPayload } from "../types";
+import {OutgoingHttpHeaders} from 'http';
+import {ContextPayload} from '../types';
 
 export default class Context implements ContextPayload {
-
   statusCode:number;
   headerValues:OutgoingHttpHeaders;
   result:unknown;
@@ -16,7 +15,7 @@ export default class Context implements ContextPayload {
   }
 
   code(statusCode?:number):this {
-    if (!statusCode) {
+    if(!statusCode) {
       return this;
     }
     this.statusCode = statusCode;
@@ -24,7 +23,7 @@ export default class Context implements ContextPayload {
   }
 
   headers(headerValues?:OutgoingHttpHeaders):this {
-    if (!headerValues) {
+    if(!headerValues) {
       return this;
     }
     this.headerValues = headerValues;
@@ -36,9 +35,8 @@ export default class Context implements ContextPayload {
     return this;
   }
 
-  err(error: Error):this {
+  err(error:Error):this {
     this.error = error;
     return this;
   }
-
 }
