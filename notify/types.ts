@@ -56,35 +56,6 @@ export interface WithingsData {
   comment:string | null;
 }
 
-export interface Config {
-  WITHINGS_API_DATA:{
-    TYPES:{
-      getmeas:string;
-      getactivity:string;
-      getintradayactivity:string;
-      getsummary:string;
-    };
-    URLS:{
-      getmeas:string;
-      getactivity:string;
-      getintradayactivity:string;
-      getsummary:string;
-    };
-    START:{
-      getmeas:string;
-      getactivity:string;
-      getintradayactivity:string;
-      getsummary:string;
-    };
-    END:{
-      getmeas:string;
-      getactivity:string;
-      getintradayactivity:string;
-      getsummary:string;
-    };
-  };
-}
-
 export interface BloodPressureReading {
   identifier:string;
   subject:string;

@@ -7,7 +7,8 @@ import mockFs from 'mock-fs';
 import path from 'path';
 import nock from 'nock';
 import {promises as fs} from 'fs';
-import {Config, WithingsData, Notification} from '../types';
+import {WithingsData, Notification} from '../types';
+import config from '../config';
 
 describe('handler', function() {
   this.timeout(0);
@@ -31,12 +32,10 @@ describe('handler', function() {
       amqplib: require('mock-amqplib')
     });
     // fs mock
-    const config:Config = JSON.parse(await fs.readFile(path.resolve(__dirname, '../config.json'), 'utf-8')) as Config;
     config.WITHINGS_API_DATA.URLS.getmeas = 'https://mocked';
     // fs mock
     const mocks:any = {
-      '/tls': {'cert.crt': 'foo', 'key.key': 'bar', 'ca.pem': 'baz'},
-      'config.json': JSON.stringify(config)
+      '/tls': {'cert.crt': 'foo', 'key.key': 'bar', 'ca.pem': 'baz'}
     };
     try {
       fs.access('node_modules');

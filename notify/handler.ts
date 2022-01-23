@@ -1,7 +1,6 @@
 import {
   ContextPayload,
   EventPayload,
-  Config,
   Notification,
   PatientId,
   Token,
@@ -13,6 +12,7 @@ import {promises as fs} from 'fs';
 import got, {Response} from 'got';
 import amqp, {Connection, Channel} from 'amqplib';
 import Withings from './lib/withings';
+import config from './config';
 
 export default async(event:EventPayload, context:ContextPayload):Promise<ContextPayload> => {
   const logger = winston.createLogger({
@@ -20,7 +20,6 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
     format: winston.format.simple(),
     transports: [new winston.transports.Console({stderrLevels: ['error']})]
   });
-  const config:Config = JSON.parse(await fs.readFile('./config.json', 'utf8'));
 
   // ~mdc send positive response to withings regardless (also acks initial HEAD request from withings when setting up notifications)
   if(!event.body) {
