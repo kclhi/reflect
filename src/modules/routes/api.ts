@@ -2,6 +2,7 @@ import logger from '../../winston';
 import {FastifyInstance} from 'fastify';
 import {FHIRResource, FHIRResourceType, PatientId, PatientIdType} from '../types/api';
 import got, {Response} from 'got';
+import {Bundle, Observation} from 'fhir-typescript-models';
 
 export default async(server:FastifyInstance) => {
   server.addHook(
@@ -29,10 +30,11 @@ export default async(server:FastifyInstance) => {
       security: [{bearerAuth: []}]
     },
     handler: async(req, rep) => {
-      let getFHIR:Response<string> | undefined;
+      let getFHIR:Response<Observation | Bundle> | undefined;
       try {
         getFHIR = await got.get(
-          'https://' + server.config.INTERNAL_API_URL + '/fhir/Observation?subject=' + req.body.patientId
+          'https://' + server.config.INTERNAL_API_URL + '/fhir/Observation?subject=' + req.body.patientId,
+          {responseType: 'json'}
         );
         if(getFHIR.statusCode != 200) throw Error('fhir server returned status: ' + getFHIR.statusCode);
         logger.debug('internal fhir request response: ' + getFHIR.body);
