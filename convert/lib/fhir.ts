@@ -49,23 +49,6 @@ export default class Fhir {
     return quantity;
   }
 
-  static createPatientResource(id:string, subject:string):Patient {
-    const patient:Patient = new Patient();
-    patient.id = id;
-    /* identifier */
-    const identifier = new Identifier();
-    const typeCoding = new CodeableConcept();
-    const valueString = new PrimitiveString();
-    typeCoding.coding = new Array<Coding>(
-      Fhir.createCode('http://terminology.hl7.org/CodeSystem/v2-0203', 'NH', 'UK National Health Service number')
-    );
-    identifier.type = typeCoding;
-    valueString.value = subject;
-    identifier.value = valueString;
-    patient.identifier = new Array<Identifier>(identifier);
-    return patient;
-  }
-
   static createMeasure(
     codeSystem:string,
     codeValue:string,
@@ -81,7 +64,14 @@ export default class Fhir {
     return measure;
   }
 
-  static createBpResource(subject:string, sbp:number, dbp:number, hr:number, id:string = null):Observation {
+  static createBpResource(
+    subject:string,
+    sbp:number,
+    dbp:number,
+    hr:number,
+    id:string = null,
+    date:string = null
+  ):Observation {
     return this.createObservationResource(
       subject,
       'https://loinc.org',
@@ -92,7 +82,8 @@ export default class Fhir {
         this.createMeasure('http://loinc.org', '8462-4', 'Diastolic blood pressure', dbp, 'mmHg'),
         this.createMeasure('http://loinc.org', '8867-4', 'Heart rate', hr, 'beats/minute')
       ),
-      id
+      id,
+      date
     );
   }
 
@@ -101,7 +92,8 @@ export default class Fhir {
     resting:number,
     rate:number,
     intensity:number,
-    id:string = null
+    id:string = null,
+    date:string = null
   ):Observation {
     return this.createObservationResource(
       subject,
@@ -113,7 +105,8 @@ export default class Fhir {
         this.createMeasure('http://loinc.org', '8867-4', 'Heart rate', rate, 'beats/minute'),
         this.createMeasure('http://loinc.org', '82290-8', 'Freq aerobic physical activity', intensity, 'beats/minute')
       ),
-      id
+      id,
+      date
     );
   }
 
@@ -123,7 +116,8 @@ export default class Fhir {
     typeValue:string,
     typeDisplay:string,
     measures:Array<ObservationComponent>,
-    id:string = null
+    id:string = null,
+    date:string = null
   ):Observation {
     const observation:Observation = new Observation();
     /* id */
@@ -151,11 +145,28 @@ export default class Fhir {
     observation.subject = subject;
     /* time */
     const dateTime:PrimitiveDateTime = new PrimitiveDateTime();
-    dateTime.value = new Date().toISOString();
+    dateTime.value = date ? new Date(date).toISOString() : new Date().toISOString();
     observation.effective = dateTime;
     /* measures (components) */
     observation.component = measures;
     return observation;
+  }
+
+  static createPatientResource(id:string, subject:string):Patient {
+    const patient:Patient = new Patient();
+    patient.id = id;
+    /* identifier */
+    const identifier = new Identifier();
+    const typeCoding = new CodeableConcept();
+    const valueString = new PrimitiveString();
+    typeCoding.coding = new Array<Coding>(
+      Fhir.createCode('http://terminology.hl7.org/CodeSystem/v2-0203', 'NH', 'UK National Health Service number')
+    );
+    identifier.type = typeCoding;
+    valueString.value = subject;
+    identifier.value = valueString;
+    patient.identifier = new Array<Identifier>(identifier);
+    return patient;
   }
 
   static async addResourceToFHIRServer(baseUrl:string, id:string = null, resource:DomainResource):Promise<boolean> {
