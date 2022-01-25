@@ -33,7 +33,6 @@ describe('handler', function() {
     });
     // fs mock
     config.WITHINGS_API_DATA.URLS.getmeas = 'https://mocked';
-    // fs mock
     const mocks:any = {
       '/tls': {'cert.crt': 'foo', 'key.key': 'bar', 'ca.pem': 'baz'}
     };
