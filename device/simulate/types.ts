@@ -26,4 +26,5 @@ export interface BloodPressureReading {
   dbp:number;
   sbp:number;
   hr:number;
+  date:string;
 }

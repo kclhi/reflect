@@ -2,6 +2,7 @@ import {ContextPayload, EventPayload, BloodPressureReading} from './types';
 import winston from 'winston';
 import {promises as fs} from 'fs';
 import amqp, {Connection, Channel} from 'amqplib';
+import data from './data';
 
 export default async(event:EventPayload, context:ContextPayload):Promise<ContextPayload> => {
   const logger = winston.createLogger({
@@ -27,22 +28,25 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
     );
     const channel:Channel = await connection.createChannel();
     await channel.assertExchange(process.env.EXCHANGE_NAME, 'direct', {durable: false});
-    channel.publish(
-      process.env.EXCHANGE_NAME,
-      process.env.EXCHANGE_TOPIC,
-      Buffer.from(
-        JSON.stringify({
-          identifier: 'ufoo',
-          subject: 'ufoo',
-          performer: 'bar',
-          sbp: 616,
-          dbp: 716,
-          hr: 816
-        } as BloodPressureReading)
-      ),
-      {contentType: 'application/json'}
-    );
-    logger.debug('sent information to queue');
+    for(const reading of data) {
+      channel.publish(
+        process.env.EXCHANGE_NAME,
+        process.env.EXCHANGE_TOPIC,
+        Buffer.from(
+          JSON.stringify({
+            identifier: reading.identifier,
+            subject: reading.subject,
+            performer: reading.performer,
+            sbp: reading.sbp,
+            dbp: reading.dbp,
+            hr: reading.hr,
+            date: reading.date
+          } as BloodPressureReading)
+        ),
+        {contentType: 'application/json'}
+      );
+    }
+    logger.debug('sent information to queue: ' + JSON.stringify(data));
     await channel.close();
     await connection.close();
   } catch(error) {
