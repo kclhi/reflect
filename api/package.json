@@ -19,6 +19,7 @@
     "fastify-env": "^2.1.1",
     "fastify-jwt": "^4.1.1",
     "fastify-swagger": "^4.13.0",
+    "fhir-typescript-models": "^1.0.3",
     "got": "^11.8.3",
     "grunt": "^1.4.1",
     "grunt-contrib-copy": "^1.0.0",
