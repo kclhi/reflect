@@ -1,0 +1,21 @@
+stages:
+  - dependencies
+  - test_user
+
+cache:
+  paths:
+    - node_modules/
+
+dependencies:
+  image: node:16-bullseye
+  stage: dependencies
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+test_user:
+  image: node:16-bullseye
+  stage: test_user
+  script: npm test
