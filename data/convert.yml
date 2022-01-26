@@ -1,0 +1,17 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://services.reflectproject.co.uk
+functions:
+  convert:
+    lang: typescript-fastify
+    handler: ./convert
+    image: registry.gitlab.com/kclreflect/containers/convert:latest
+    secrets:
+      - service-ca-cert
+    annotations:
+      topic: sensor
+    environment_file:
+      - env.convert.yml
+    environment:
+      NODE_EXTRA_CA_CERTS: /var/openfaas/secrets/service-ca.crt

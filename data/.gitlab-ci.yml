@@ -1,0 +1,21 @@
+stages:
+  - dependencies
+  - test_convert
+
+cache:
+  paths:
+    - node_modules/
+
+dependencies:
+  image: node:16-alpine
+  stage: dependencies
+  script:
+    - npm install convert/
+  artifacts:
+    paths:
+      - node_modules/
+
+test_convert:
+  image: node:16-alpine
+  stage: test_convert
+  script: npm --prefix convert test
