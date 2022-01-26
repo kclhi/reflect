@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-connector
+  namespace: openfaas
+spec:
+  selector:
+    matchLabels:
+      app: rabbitmq-connector
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-connector
+    spec:
+      containers:
+      - name: connector
+        image: registry.gitlab.com/kclreflect/rabbitmq-connector/rabbitmq-connector:latest
+        imagePullPolicy: Always
+        env:
+        - name: basic_auth
+          value: "true"
+        - name: secret_mount_path
+          value: "/etc/openfaas"
+        - name: OPEN_FAAS_GW_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: OPEN_FAAS_GW_URL
+        - name: RMQ_TOPICS
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: RMQ_TOPICS
+        - name: RMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: RMQ_HOST
+        - name: RMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: RMQ_PORT
+        - name: RMQ_USER
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: RMQ_USER
+        - name: RMQ_PASS
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: RMQ_PASS
+        - name: REQ_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: REQ_TIMEOUT
+        - name: TOPIC_MAP_REFRESH_TIME
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-connector-configmap
+              key: TOPIC_MAP_REFRESH_TIME
+        - name: PATH_TO_TOPOLOGY
+          value: "/var/topology/topology.yaml"
+        - name: TLS_ENABLED
+          value: "true"
+        - name: TLS_CA_CERT_PATH
+          value: "/var/queue-cert/queue.pem"
+        - name: TLS_SERVER_CERT_PATH
+          value: "/var/queue-client-tls/tls.crt"
+        - name: TLS_SERVER_KEY_PATH
+          value: "/var/queue-client-tls/tls.key"
+        resources: # Adjust them to suite your needs
+          requests:
+            cpu: 250m
+            memory: .25Gi
+          limits:
+            cpu: 250m
+            memory: .25Gi
+        volumeMounts:
+          - name: basic-auth
+            readOnly: true
+            mountPath: "/etc/openfaas"
+          - name: topology
+            readOnly: true
+            mountPath: "/var/topology"
+          - name: queue-cert
+            readOnly: true
+            mountPath: "/var/queue-cert"
+          - name: queue-client-tls
+            readOnly: true
+            mountPath: "/var/queue-client-tls"
+      volumes:
+        - name: basic-auth
+          secret:
+            secretName: basic-auth
+        - name: topology
+          configMap:
+            name: topology
+        - name: queue-cert
+          secret:
+            secretName: queue-cert
+        - name: queue-client-tls
+          secret:
+            secretName: queue-client-tls

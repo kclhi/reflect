@@ -1,0 +1,6 @@
+- name: sensor-data
+  topics: [sensor]
+  declare: true
+  type: "direct"
+  durable: false
+  auto-deleted: true

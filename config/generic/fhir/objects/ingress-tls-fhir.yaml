@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fhir
+  annotations:
+    # add an annotation indicating the issuer to use.
+    cert-manager.io/cluster-issuer: "service-ca-issuer"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - INTERNAL_API_URL
+    secretName: fhir-tls
+  rules:
+  - host: INTERNAL_API_URL
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: hapi-fhir-jpaserver
+            port:
+              number: 8080
+  
