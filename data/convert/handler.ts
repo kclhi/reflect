@@ -41,7 +41,9 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
       bloodPresureReading.subject,
       bloodPresureReading.sbp,
       bloodPresureReading.dbp,
-      bloodPresureReading.hr
+      bloodPresureReading.hr,
+      bloodPresureReading.identifier || null,
+      bloodPresureReading.date || null
     );
     logger.debug(JSON.stringify(bpObservationFhirResource.toJSON()));
     try {
@@ -68,7 +70,8 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
       heartRateReading.resting,
       heartRateReading.rate,
       heartRateReading.intensity,
-      heartRateReading.identifier
+      heartRateReading.identifier,
+      heartRateReading.date || null
     );
     logger.debug(JSON.stringify(hrObservationFhirResource.toJSON()));
     try {

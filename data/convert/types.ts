@@ -23,6 +23,7 @@ export interface Reading {
   identifier:string;
   subject:string;
   performer:string;
+  date:string;
 }
 
 export interface BloodPressureReading extends Reading {
