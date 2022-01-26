@@ -1,0 +1,1 @@
+{"status":0,"body":{"updatetime":616,"timezone":"foo","measuregrps":[{"grpid":616,"attrib":2,"date":616,"created":616,"category":1,"deviceid":null,"hash_deviceid":null,"measures":[{"value":616,"type":9,"unit":0,"algo":0,"fm":616},{"value":61600,"type":10,"unit":-2,"algo":0,"fm":61600},{"value":616,"type":11,"unit":0,"algo":0,"fm":616}],"comment":null}]}}
