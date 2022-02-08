@@ -1,4 +1,4 @@
-import {ContextPayload, EventPayload, BloodPressureReading} from './types';
+import {ContextPayload, EventPayload, BloodPressureReading, HeartRateReading} from './types';
 import winston from 'winston';
 import {promises as fs} from 'fs';
 import amqp, {Connection, Channel} from 'amqplib';
@@ -29,22 +29,41 @@ export default async(event:EventPayload, context:ContextPayload):Promise<Context
     const channel:Channel = await connection.createChannel();
     await channel.assertExchange(process.env.EXCHANGE_NAME, 'direct', {durable: false});
     for(const reading of data) {
-      channel.publish(
-        process.env.EXCHANGE_NAME,
-        process.env.EXCHANGE_TOPIC,
-        Buffer.from(
-          JSON.stringify({
-            identifier: reading.identifier,
-            subject: reading.subject,
-            performer: reading.performer,
-            sbp: reading.sbp,
-            dbp: reading.dbp,
-            hr: reading.hr,
-            date: reading.date
-          } as BloodPressureReading)
-        ),
-        {contentType: 'application/json'}
-      );
+      if(reading.sbp) {
+        channel.publish(
+          process.env.EXCHANGE_NAME,
+          process.env.EXCHANGE_TOPIC,
+          Buffer.from(
+            JSON.stringify({
+              identifier: reading.identifier,
+              subject: reading.subject,
+              performer: reading.performer,
+              sbp: reading.sbp,
+              dbp: reading.dbp,
+              hr: reading.hr,
+              date: reading.date
+            } as BloodPressureReading)
+          ),
+          {contentType: 'application/json'}
+        );
+      } else if(reading.resting) {
+        channel.publish(
+          process.env.EXCHANGE_NAME,
+          process.env.EXCHANGE_TOPIC,
+          Buffer.from(
+            JSON.stringify({
+              identifier: reading.identifier,
+              subject: reading.subject,
+              performer: reading.performer,
+              resting: reading.resting,
+              rate: reading.rate,
+              intensity: reading.intensity,
+              date: reading.date
+            } as HeartRateReading)
+          ),
+          {contentType: 'application/json'}
+        );
+      }
     }
     logger.debug('sent information to queue: ' + JSON.stringify(data));
     await channel.close();
