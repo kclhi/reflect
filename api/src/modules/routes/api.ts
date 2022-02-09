@@ -33,7 +33,7 @@ export default async(server:FastifyInstance) => {
       let getFHIR:Response<Observation | Bundle> | undefined;
       try {
         getFHIR = await got.get(
-          'https://' + server.config.INTERNAL_API_URL + '/fhir/Observation?subject=' + req.body.patientId,
+          'https://' + server.config.INTERNAL_API_URL + '/fhir/Observation?subject=' + req.body.patientId + '&_sort=-date&_count=10000',
           {responseType: 'json'}
         );
         if(getFHIR.statusCode != 200) throw Error('fhir server returned status: ' + getFHIR.statusCode);
