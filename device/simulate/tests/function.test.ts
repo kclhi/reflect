@@ -12,7 +12,9 @@ describe('handler', () => {
     this.timeout(0);
     // import mocks
     proxyquire.noCallThru();
-    const simulationData = [{"identifier": "foo", "subject": "bar", "performer": "baz", "sbp": 616, "dbp": 816, "hr": 916, "date": "qux"}];
+    const simulationData = [
+      {identifier: 'foo', subject: 'bar', performer: 'baz', sbp: 616, dbp: 816, hr: 916, date: 'qux'}
+    ];
     this.handler = await proxyquire('../handler', {
       amqplib: require('mock-amqplib'),
       './data': simulationData
@@ -37,7 +39,6 @@ describe('handler', () => {
     process.env.CERT_PATH = '/tls/cert.crt';
     process.env.KEY_PATH = '/tls/key.key';
     process.env.CA_PATH = '/tls/ca.pem';
-   
   });
   it('should respond', async function() {
     const event:FunctionEvent = new FunctionEvent({} as FastifyRequest);

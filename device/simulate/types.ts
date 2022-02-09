@@ -28,3 +28,12 @@ export interface BloodPressureReading {
   hr:number;
   date:string;
 }
+
+export interface HeartRateReading {
+  identifier:string;
+  subject:string;
+  performer:string;
+  resting:number;
+  rate:number;
+  intensity:number;
+}
