@@ -13,7 +13,7 @@ export default async(server:FastifyInstance) => {
       : server.basicAuth
   );
 
-  server.route({
+  server.route<{Querystring:PatientIdType}>({
     url: '/register',
     method: ['GET'],
     handler: (req, rep) => {
@@ -34,8 +34,16 @@ export default async(server:FastifyInstance) => {
         req.unsignCookie(req.cookies[server.config.PATIENT_ID_COOKIE]).valid
       )
         patientId = req.unsignCookie(req.cookies[server.config.PATIENT_ID_COOKIE]).value;
-      logger.debug('patient id: ' + patientId);
+      logger.debug('patient id: ' + (patientId || req.query.patientId));
       // ~mdc garmin auth handled by Grant module
+      if(req.query.patientId) {
+        rep.setCookie(server.config.PATIENT_ID_COOKIE, req.query.patientId, {
+          path: '/',
+          httpOnly: true,
+          secure: true,
+          signed: true
+        });
+      }
       rep.view('register.pug', {
         withingsRedirectUrl: withingsRedirectUrl,
         garminRedirectUrl: '/connect/garmin',
