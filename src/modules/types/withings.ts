@@ -14,6 +14,11 @@ export interface TokenResponseBody {
   refresh_token:string;
   userid:string;
 }
+
+export interface TokenResponse {
+  body:TokenResponseBody;
+}
+
 export interface NotificationSubscription {
   action:string;
   user_id:string;
