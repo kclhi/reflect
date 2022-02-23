@@ -11,8 +11,10 @@ html(lang="en" class="notranslate" translate="no")
   body
     div(class="content columns is-vcentered")
       div(class="column is-2 is-offset-3" style="border-right: 1px solid #dbdbdb;")
-        img(class="image" src="/device/assets/images/kcl.png")
-        img(class="image" src="/device/assets/images/metadvice.png")
+        if partner
+          img(class="image" src="/device/assets/images/"+partner+".png")
+        else
+          img(class="image" src="/device/assets/images/kcl.png")
       div(class="column is-3 is-offset-1")
         block content
       div(class="column is-4")

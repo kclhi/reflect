@@ -1,7 +1,7 @@
 import logger from '../../winston';
 import {FastifyInstance} from 'fastify';
 import * as crypto from 'crypto';
-import {PatientId, PatientIdType} from '../types/types';
+import {PatientId, PatientIdType, RegistrationType} from '../types/types';
 
 export default async(server:FastifyInstance) => {
   server.addHook(
@@ -13,7 +13,7 @@ export default async(server:FastifyInstance) => {
       : server.basicAuth
   );
 
-  server.route<{Querystring:PatientIdType}>({
+  server.route<{Querystring:RegistrationType}>({
     url: '/register',
     method: ['GET'],
     handler: (req, rep) => {
@@ -47,7 +47,8 @@ export default async(server:FastifyInstance) => {
       rep.view('register.pug', {
         withingsRedirectUrl: withingsRedirectUrl,
         garminRedirectUrl: '/connect/garmin',
-        patientId: patientId
+        patientId: patientId,
+        partner: req.query.partner || null
       });
     }
   });
