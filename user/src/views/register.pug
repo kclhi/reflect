@@ -3,7 +3,7 @@ extends layout
 block pageJS
   script.
     ready(function(event) { 
-      if(new URL(window.location).hash=='#connect') showConnect();
+      if(new URL(window.location).hash=='#vendors' || new URLSearchParams(location.search).has('patientId')) showVendors();
       nhsFieldCheck();
       addNhsFieldCheck();
       addNhsClick();
@@ -28,7 +28,7 @@ block content
     div(class="field is-grouped")
       div(class="control")
         button(id="nhs-next" class="button is-link" disabled) Next
-  div(id="connect" style="display:none;")
+  div(id="vendors" style="display:none;")
     div(class="field")
       label(class="label") 
         | Select service 

@@ -1,5 +1,5 @@
 import got, {Response} from 'got';
-import {TokenResponseBody, NotificationSubscription} from '../types/withings';
+import {NotificationSubscription, TokenResponse, TokenResponseBody} from '../types/withings';
 import logger from '../../winston';
 
 export default class Withings {
@@ -12,8 +12,9 @@ export default class Withings {
   ):Promise<TokenResponseBody | undefined> {
     try {
       logger.debug('sending request for access token...');
-      const access:Response<TokenResponseBody> = await got.post(tokenUrl, {
+      const access:Response<TokenResponse> = await got.post(tokenUrl, {
         form: {
+          action: 'requesttoken',
           grant_type: 'authorization_code',
           client_id: clientId,
           client_secret: consumerSecret,
@@ -23,7 +24,7 @@ export default class Withings {
         responseType: 'json'
       });
       logger.debug('response from access token request: ' + access?.statusCode);
-      if(access.statusCode == 200) return access.body;
+      if(access.statusCode == 200) return access.body.body;
     } catch(error) {
       logger.error('error getting access token: ' + error);
     }
@@ -48,8 +49,9 @@ export default class Withings {
         ')'
     );
     try {
-      const access:Response<TokenResponseBody> = await got.post(tokenUrl, {
+      const access:Response<TokenResponse> = await got.post(tokenUrl, {
         form: {
+          action: 'requesttoken',
           grant_type: 'refresh_token',
           client_id: clientId,
           client_secret: consumerSecret,
@@ -58,7 +60,7 @@ export default class Withings {
         responseType: 'json'
       });
       logger.debug('response from access token request: ' + access?.statusCode);
-      if(access.statusCode == 200) return access.body;
+      if(access.statusCode == 200) return access.body.body;
     } catch(error) {
       logger.error('error refreshing access token: ' + error);
     }

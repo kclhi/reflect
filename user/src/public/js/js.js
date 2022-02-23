@@ -38,16 +38,16 @@ function nhsFieldCheck() {
 
 function addNhsFieldCheck() { document.getElementById('nhs').oninput=()=>{nhsFieldCheck();}; }
 
-function showConnect() {
+function showVendors() {
   document.getElementById('nhs').style.display='none';
-  document.getElementById('connect').style.removeProperty('display');
+  document.getElementById('vendors').style.removeProperty('display');
 }
 
 function nhsClick() {
   let nhs = document.getElementById('nhs-input').value;
   sendPostRequest('/device/setIdCookie', '{"patientId":"'+nhs+'"}', (response)=>{if(response) console.log('DEBUG: '+response)});
-  showConnect();
-  window.location = "#connect";
+  showVendors();
+  window.location = "#vendors";
 }
 
 function addNhsClick() { document.getElementById('nhs-next').onclick=()=>{nhsClick();}; }
@@ -62,7 +62,7 @@ function go(page, title, url) {
 
 function addBackNhsClick() {
   document.getElementById('nhs-back').onclick=()=>{
-    document.getElementById('connect').style.display='none';
+    document.getElementById('vendors').style.display='none';
     document.getElementById('nhs').style.removeProperty('display');
     const url = new URL(window.location);
     url.hash='';
