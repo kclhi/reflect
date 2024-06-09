@@ -1,6 +1,6 @@
 <img src="logo.png" width="350" alt="King's College London Health Informatics (kclhi) REFLECT">
 
-# Wearables
+# REFLECT
 
 Middleware for interacting with wearable devices
 
